@@ -1,25 +1,23 @@
-import logo from './logo.svg';
-import './App.css';
+import logo from "./logo.svg";
+import "./App.css";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+  const fetchText = async (url) => {
+    const response = await fetch(url);
+    return await response.text();
+  };
+  const csvUrl =
+    "https://gist.githubusercontent.com/curran/b236990081a24761f7000567094914e0/raw/cssNamedColors.csv";
+
+  fetchText(csvUrl).then((text) => {
+    console.log(text);
+  });
+  //   fetch(url).then((response) => {
+  //   response.text().then((text) => {
+  //     console.log(text);
+  //   });
+  // });
+  return <div className="App"></div>;
 }
 
 export default App;
