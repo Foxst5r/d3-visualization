@@ -1,6 +1,14 @@
 import logo from "./logo.svg";
 import "./App.css";
-import { format, scaleBand, scaleLinear, max, axisBottom, extent } from "d3";
+import {
+  timeFormat,
+  scaleBand,
+  scaleLinear,
+  scaleTime,
+  max,
+  axisBottom,
+  extent,
+} from "d3";
 import { useData } from "./useData";
 import { AxisBottom } from "./AxisBottom";
 import { AxisLeft } from "./AxisLeft";
@@ -10,8 +18,8 @@ const height = 500;
 const margin = { top: 20, right: 30, bottom: 60, left: 90 };
 const xAxisLabelOffset = 50;
 const yAxisLabelOffset = 40;
-const siFormat = format(".2s");
-const xAxisTickFormat = (tickValue) => siFormat(tickValue).replace("G", "B");
+
+const xAxisTickFormat = timeFormat("%a");
 function App() {
   const data = useData();
 
@@ -22,20 +30,21 @@ function App() {
   const innerHeight = height - margin.top - margin.bottom;
   const innerWidth = width - margin.left - margin.left;
 
-  const xValue = (d) => d.petal_length;
-  const xAxisLabel = "Petal Length";
+  const xValue = (d) => d.timestamp;
+  const xAxisLabel = "Timestamp";
 
-  const yValue = (d) => d.sepal_width;
-  const yAxisLabel = "Sepal Width";
+  const yValue = (d) => d.temperature;
+  const yAxisLabel = "Temperature";
 
-  const xScale = scaleLinear()
+  const xScale = scaleTime()
     .domain(extent(data, xValue))
     .range([0, innerWidth])
     .nice();
 
   const yScale = scaleLinear()
     .domain(extent(data, yValue))
-    .range([0, innerHeight]);
+    .range([innerHeight, 0])
+    .nice();
 
   return (
     <svg width={width} height={height}>
@@ -75,7 +84,7 @@ function App() {
           xValue={xValue}
           yValue={yValue}
           tooltipFormat={xAxisTickFormat}
-          cirlceRadius={7}
+          cirlceRadius={4}
         ></Marks>
       </g>
     </svg>

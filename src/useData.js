@@ -1,16 +1,14 @@
 import { useState, useEffect } from "react";
 import { csv } from "d3";
 const csvUrl =
-  "https://gist.githubusercontent.com/curran/a08a1080b88344b0c8a7/raw/639388c2cbc2120a14dcf466e85730eb8be498bb/iris.csv";
+  "https://gist.githubusercontent.com/curran/60b40877ef898f19aeb8/raw/9476be5bd15fb15a6d5c733dd79788fb679c9be9/week_temperature_sf.csv";
 export const useData = () => {
   const [data, setData] = useState(null);
 
   useEffect(() => {
     const row = (d) => {
-      d.sepal_length = +d.sepal_length;
-      d.sepal_width = +d.sepal_width;
-      d.petal_length = +d.petal_length;
-      d.petal_width = +d.petal_width;
+      d.temperature = +d.temperature;
+      d.timestamp = new Date(d.timestamp);
       return d;
     };
     csv(csvUrl, row).then((data) => {
