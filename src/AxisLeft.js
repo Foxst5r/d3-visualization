@@ -1,15 +1,22 @@
-export const AxisLeft = ({ yScale }) => {
-  return yScale.domain().map((tickValue) => (
-    <g className="tick">
-      <text
-        key={tickValue}
-        style={{ textAnchor: "end" }}
-        x={-3}
-        dy=".32em"
-        y={yScale(tickValue) + yScale.bandwidth() / 2}
+export const AxisLeft = ({ yScale, innerWidth, tickOffSet = 3 }) => {
+  return yScale.ticks().map((tickValue, idx) => {
+    console.log(tickValue, idx);
+    return (
+      <g
+        key={idx}
+        className="tick"
+        transform={`translate(0,${yScale(tickValue)})`}
       >
-        {tickValue}
-      </text>
-    </g>
-  ));
+        <line x2={innerWidth} />
+        <text
+          key={tickValue}
+          style={{ textAnchor: "end" }}
+          x={-tickOffSet}
+          dy=".32em"
+        >
+          {tickValue}
+        </text>
+      </g>
+    );
+  });
 };
