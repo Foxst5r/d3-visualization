@@ -14,3 +14,10 @@ body {
   font-size: 2.5em;
   fill: #635f5d;
 }
+label,
+select {
+  font-size: 2em;
+}
+select option {
+  font-size: 1rem;
+}
