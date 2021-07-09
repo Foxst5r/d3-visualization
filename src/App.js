@@ -45,6 +45,9 @@ const findLabel = (value) => {
 function App() {
   const data = useData();
 
+  const [hoveredValue, setHoveredValue] = useState(null);
+  console.log(hoveredValue);
+
   const cirlceRadius = 7;
 
   const initialXAttribute = "petal_length";
@@ -61,13 +64,16 @@ function App() {
 
   const colorLegendLabel = "Species";
 
+  const fadeOpacity = 0.2;
+
   const innerHeight = height - margin.top - margin.bottom;
   const innerWidth = width - margin.left - margin.left;
 
   if (!data) {
     return <pre>Loading... </pre>;
   }
-  console.log(data.columns);
+
+  const filteredData = data.filter((d) => hoveredValue === colorValue(d));
 
   const xScale = scaleLinear()
     .domain(extent(data, xValue))
@@ -142,12 +148,27 @@ function App() {
               {colorLegendLabel}
             </text>
             <ColorLegend
+              onHover={setHoveredValue}
               colorScale={colorScale}
               tickSize={cirlceRadius}
+              fadeOpacity={fadeOpacity}
             ></ColorLegend>
           </g>
+          <g opacity={hoveredValue ? fadeOpacity : 1}>
+            <Marks
+              data={data}
+              xScale={xScale}
+              yScale={yScale}
+              colorScale={colorScale}
+              xValue={xValue}
+              yValue={yValue}
+              colorValue={colorValue}
+              tooltipFormat={xAxisTickFormat}
+              cirlceRadius={cirlceRadius}
+            ></Marks>
+          </g>
           <Marks
-            data={data}
+            data={filteredData}
             xScale={xScale}
             yScale={yScale}
             colorScale={colorScale}

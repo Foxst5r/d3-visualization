@@ -1,6 +1,5 @@
 export const AxisLeft = ({ yScale, innerWidth, tickOffSet = 3 }) => {
   return yScale.ticks().map((tickValue, idx) => {
-    console.log(tickValue, idx);
     return (
       <g
         key={idx}

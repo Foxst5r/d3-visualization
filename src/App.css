@@ -6,6 +6,7 @@ body {
 }
 .tick text {
   fill: #635f5d;
+  cursor: default;
 }
 
 .axis-label,
