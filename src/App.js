@@ -1,6 +1,8 @@
 import logo from "./logo.svg";
 import "./App.css";
 import { format, scaleBand, scaleLinear, max, axisBottom, extent } from "d3";
+import ReactDropdown from "react-dropdown";
+import "react-dropdown/style.css";
 import { useData } from "./useData";
 import { AxisBottom } from "./AxisBottom";
 import { AxisLeft } from "./AxisLeft";
@@ -71,20 +73,21 @@ function App() {
 
   return (
     <>
-      <label for="x-select">X-axis:</label>
-      <Dropdown
-        options={attributes}
-        id="x-select"
-        selectedValue={xAttribute}
-        onSelectedValueChange={setXAttribute}
-      />
-      <label for="y-select">Y-axis:</label>
-      <Dropdown
-        options={attributes}
-        id="y-select"
-        selectedValue={yAttribute}
-        onSelectedValueChange={setYAttribute}
-      />
+      <div className="menus-container">
+        <span className="dropdown-label">X-axis:</span>
+        <ReactDropdown
+          options={attributes}
+          value={xAttribute}
+          onChange={({ value }) => setXAttribute(value)}
+        />
+        <span className="dropdown-label">Y-axis:</span>
+        <ReactDropdown
+          options={attributes}
+          value={yAttribute}
+          onChange={({ value }) => setYAttribute(value)}
+        />
+      </div>
+
       <svg width={width} height={height}>
         <g transform={`translate(${margin.left},${margin.top})`}>
           <AxisBottom

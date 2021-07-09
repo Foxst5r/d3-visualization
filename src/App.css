@@ -10,14 +10,28 @@ body {
 .mark {
   fill: #137b80;
 }
-.axis-label {
-  font-size: 2.5em;
-  fill: #635f5d;
-}
-label,
-select {
+.axis-label,
+.dropdown-label {
   font-size: 2em;
+  fill: #635f5d;
+  color: #635f5d;
 }
-select option {
-  font-size: 1rem;
+.dropdown-label {
+  margin-left: 50px;
+  margin-right: 5px;
+}
+.Dropdown-root {
+  font-size: 1.5em;
+  width: 300px;
+  display: inline-block;
+}
+.Dropdown-menu {
+  max-height: 400px;
+}
+.menus-container {
+  display: flex;
+  margin-top: 10px;
+  margin-right: 15px;
+  justify-content: center;
+  align-items: center;
 }
