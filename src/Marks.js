@@ -2,8 +2,10 @@ export const Marks = ({
   data,
   xScale,
   yScale,
+  colorScale,
   xValue,
   yValue,
+  colorValue,
   tooltipFormat,
   cirlceRadius,
 }) => {
@@ -15,6 +17,7 @@ export const Marks = ({
         key={idx}
         cx={xScale(xValue(d))}
         cy={yScale(yValue(d))}
+        fill={colorScale(colorValue(d))}
         r={cirlceRadius}
       >
         <title>{tooltipFormat(xValue(d))}</title>

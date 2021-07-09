@@ -1,6 +1,14 @@
 import logo from "./logo.svg";
 import "./App.css";
-import { format, scaleBand, scaleLinear, max, axisBottom, extent } from "d3";
+import {
+  format,
+  scaleBand,
+  scaleLinear,
+  max,
+  axisBottom,
+  extent,
+  scaleOrdinal,
+} from "d3";
 import ReactDropdown from "react-dropdown";
 import "react-dropdown/style.css";
 import { useData } from "./useData";
@@ -9,11 +17,12 @@ import { AxisLeft } from "./AxisLeft";
 import { Marks } from "./Marks";
 import { Dropdown } from "./Dropdown";
 import { useState } from "react";
+import { ColorLegend } from "./ColorLegend";
 
 const width = 1000;
 const menuHeight = 0;
 const height = 500 - menuHeight;
-const margin = { top: 20, right: 30, bottom: 60, left: 90 };
+const margin = { top: 20, right: 300, bottom: 60, left: 150 };
 const xAxisLabelOffset = 50;
 const yAxisLabelOffset = 40;
 const siFormat = format(".2s");
@@ -36,6 +45,8 @@ const findLabel = (value) => {
 function App() {
   const data = useData();
 
+  const cirlceRadius = 7;
+
   const initialXAttribute = "petal_length";
   const [xAttribute, setXAttribute] = useState(initialXAttribute);
   const xValue = (d) => d[xAttribute];
@@ -45,6 +56,10 @@ function App() {
   const [yAttribute, setYAttribute] = useState(initialYAttribute);
   const yValue = (d) => d[yAttribute];
   const yAxisLabel = findLabel(yAttribute);
+
+  const colorValue = (d) => d.species;
+
+  const colorLegendLabel = "Species";
 
   const innerHeight = height - margin.top - margin.bottom;
   const innerWidth = width - margin.left - margin.left;
@@ -62,6 +77,10 @@ function App() {
   const yScale = scaleLinear()
     .domain(extent(data, yValue))
     .range([0, innerHeight]);
+
+  const colorScale = scaleOrdinal()
+    .domain(data.map(colorValue))
+    .range(["#E6842A", "#137B80", "#8E6C8A"]);
 
   // function findLabel(value) {
   //   const foundItems = attributes.filter((x) => x.value === value);
@@ -118,14 +137,25 @@ function App() {
           >
             {yAxisLabel}
           </text>
+          <g transform={`translate(${innerWidth + 60},60)`}>
+            <text className="axis-label" textAnchor="middle" x={35} y={-30}>
+              {colorLegendLabel}
+            </text>
+            <ColorLegend
+              colorScale={colorScale}
+              tickSize={cirlceRadius}
+            ></ColorLegend>
+          </g>
           <Marks
             data={data}
             xScale={xScale}
             yScale={yScale}
+            colorScale={colorScale}
             xValue={xValue}
             yValue={yValue}
+            colorValue={colorValue}
             tooltipFormat={xAxisTickFormat}
-            cirlceRadius={7}
+            cirlceRadius={cirlceRadius}
           ></Marks>
         </g>
       </svg>
