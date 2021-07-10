@@ -2,16 +2,20 @@ body {
   font-family: "Poppins", sans-serif;
 }
 .marks .land {
-  fill: #137b80;
+  fill: #dad2d2;
 }
 .marks .sphere {
   fill: #c4cdd2;
 }
 .marks .interiors {
   fill: none;
-  stroke: #3ea9bf;
+  stroke: gray;
 }
 .marks .graticules {
   fill: none;
   stroke: #839da2;
+}
+circle {
+  fill: #137b80;
+  opacity: 0.4;
 }
