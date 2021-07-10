@@ -1,33 +1,34 @@
 import { line, path, curveNatural } from "d3";
+import react from "react";
 export const Marks = ({
-  data,
+  binnedData,
   xScale,
   yScale,
-  xValue,
-  yValue,
   tooltipFormat,
-  cirlceRadius,
+  innerHeight,
 }) => {
   return (
     <g className="marks">
-      <path
+      {/* <path
         fill="none"
         stroke="black"
         d={line()
           .x((d) => xScale(xValue(d)))
           .y((d) => yScale(yValue(d)))
           .curve(curveNatural)(data)}
-      />
-      {data.map((d, idx) => {
+      /> */}
+      {binnedData.map((d, idx) => {
         return (
-          <circle
+          <rect
+            className="mark"
             key={idx}
-            cx={xScale(xValue(d))}
-            cy={yScale(yValue(d))}
-            r={cirlceRadius}
+            x={xScale(d.x0)}
+            y={yScale(d.y)}
+            width={xScale(d.x1) - xScale(d.x0)}
+            height={innerHeight - yScale(d.y)}
           >
-            <title>{tooltipFormat(xValue(d))}</title>
-          </circle>
+            <title>{tooltipFormat(d.y)}</title>
+          </rect>
         );
       })}
     </g>

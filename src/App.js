@@ -8,6 +8,9 @@ import {
   max,
   axisBottom,
   extent,
+  bin,
+  timeMonths,
+  sum,
 } from "d3";
 import { useData } from "./useData";
 import { AxisBottom } from "./AxisBottom";
@@ -16,10 +19,10 @@ import { Marks } from "./Marks";
 const width = 1000;
 const height = 500;
 const margin = { top: 20, right: 30, bottom: 60, left: 90 };
-const xAxisLabelOffset = 50;
+const xAxisLabelOffset = 80;
 const yAxisLabelOffset = 40;
 
-const xAxisTickFormat = timeFormat("%a");
+const xAxisTickFormat = timeFormat("%m/%d/%Y");
 function App() {
   const data = useData();
 
@@ -27,22 +30,36 @@ function App() {
     return <pre>Loading... </pre>;
   }
 
+  const xValue = (d) => d["Reported Date"];
+  const xAxisLabel = "Reported Date";
+
+  const yValue = (d) => d["Total Dead and Missing"];
+  const yAxisLabel = "Total Dead and Missing";
+
   const innerHeight = height - margin.top - margin.bottom;
   const innerWidth = width - margin.left - margin.left;
-
-  const xValue = (d) => d.timestamp;
-  const xAxisLabel = "Timestamp";
-
-  const yValue = (d) => d.temperature;
-  const yAxisLabel = "Temperature";
 
   const xScale = scaleTime()
     .domain(extent(data, xValue))
     .range([0, innerWidth])
     .nice();
 
+  const [start, stop] = xScale.domain();
+
+  const binnedData = bin()
+    .value(xValue)
+    .domain(xScale.domain())
+    .thresholds(timeMonths(start, stop))(data)
+    .map((array) => {
+      return {
+        y: sum(array, yValue),
+        x0: array.x0,
+        x1: array.x1,
+      };
+    });
+
   const yScale = scaleLinear()
-    .domain(extent(data, yValue))
+    .domain([0, max(binnedData, (d) => d.y)])
     .range([innerHeight, 0])
     .nice();
 
@@ -78,13 +95,11 @@ function App() {
           {yAxisLabel}
         </text>
         <Marks
-          data={data}
+          binnedData={binnedData}
           xScale={xScale}
           yScale={yScale}
-          xValue={xValue}
-          yValue={yValue}
-          tooltipFormat={xAxisTickFormat}
-          cirlceRadius={4}
+          tooltipFormat={(d) => d}
+          innerHeight={innerHeight}
         ></Marks>
       </g>
     </svg>

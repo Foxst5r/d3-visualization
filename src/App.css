@@ -7,7 +7,7 @@ body {
 .tick text {
   fill: #635f5d;
 }
-.marks circle {
+.marks rect {
   fill: #137b80;
 }
 .marks path {
