@@ -4,7 +4,16 @@ const projection = geoNaturalEarth1();
 const path = geoPath(projection);
 const graticule = geoGraticule();
 
-export const Marks = ({ worldAtlas: { land, interiors }, cities }) => {
+// const populationRadius = (population) => {
+//   return population * 0.0000009;
+// };
+
+export const Marks = ({
+  worldAtlas: { land, interiors },
+  cities,
+  sizeScale,
+  sizeValue,
+}) => {
   return (
     <g className="marks">
       <path className="sphere" d={path({ type: "Sphere" })} />
@@ -15,7 +24,7 @@ export const Marks = ({ worldAtlas: { land, interiors }, cities }) => {
       <path className="interiors" d={path(interiors)} />;
       {cities.map((d) => {
         const [x, y] = projection([d.lng, d.lat]);
-        return <circle cx={x} cy={y} r={1.5} />;
+        return <circle cx={x} cy={y} r={sizeScale(sizeValue(d))} />;
       })}
     </g>
   );
