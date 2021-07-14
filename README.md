@@ -1,1 +1,1 @@
-Geo map using geo-world-map to display city population of entire world through pixel scale
+Geo map using geo-world-map to display missing/dead migrants of entire world through pixel scale
