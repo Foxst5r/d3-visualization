@@ -22,9 +22,9 @@ export const Marks = ({
         return <path className="land" key={idx} d={path(feature)} />;
       })}
       <path className="interiors" d={path(interiors)} />;
-      {data.map((d) => {
+      {data.map((d, idx) => {
         const [x, y] = projection(d.coords);
-        return <circle cx={x} cy={y} r={sizeScale(sizeValue(d))} />;
+        return <circle key={idx} cx={x} cy={y} r={sizeScale(sizeValue(d))} />;
       })}
     </g>
   );

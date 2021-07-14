@@ -19,3 +19,18 @@ circle {
   fill: #137b80;
   opacity: 0.4;
 }
+
+.tick line {
+  stroke: #c0c0bb;
+}
+.tick text {
+  fill: #635f5d;
+  font-size: 0.5em;
+}
+.marks rect {
+  fill: #137b80;
+}
+.axis-label {
+  font-size: 0.5em;
+  fill: #635f5d;
+}

@@ -1,12 +1,11 @@
-import logo from "./logo.svg";
 import "./App.css";
-
+import { DateHistorgram } from "./DateHistogram/index";
 import { useWorldAtlas } from "./useWorldAtlas";
-import { Marks } from "./Marks";
 import { useData } from "./useData";
-import { max, scaleSqrt } from "d3";
+import { BubbleMap } from "./BubbleMap/index";
 const width = 1000;
 const height = 500;
+const dateHistogramSize = 0.2;
 
 function App() {
   const worldAtlas = useWorldAtlas();
@@ -17,21 +16,17 @@ function App() {
   }
 
   //r = sqrt(Area/pi)
-  const sizeValue = (d) => d["Total Dead and Missing"];
-  const maxRadius = 15;
-
-  const sizeScale = scaleSqrt()
-    .domain([0, max(data, sizeValue)])
-    .range([0, maxRadius]);
 
   return (
     <svg width={width} height={height}>
-      <Marks
-        worldAtlas={worldAtlas}
-        data={data}
-        sizeScale={sizeScale}
-        sizeValue={sizeValue}
-      ></Marks>
+      <BubbleMap worldAtlas={worldAtlas} data={data} />
+      <g transform={`translate(0,${height - dateHistogramSize * height})`}>
+        <DateHistorgram
+          data={data}
+          height={dateHistogramSize * height}
+          width={width}
+        />
+      </g>
     </svg>
   );
 }

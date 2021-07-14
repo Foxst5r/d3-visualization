@@ -9,13 +9,13 @@ const row = (d) => {
     .map((d) => +d)
     .reverse();
   d["Total Dead and Missing"] = +d["Total Dead and Missing"];
+  d["Reported Date"] = new Date(d["Reported Date"]);
   return d;
 };
 
 export const useData = () => {
   const [data, setData] = useState(null);
   //Json unexpected token in JSON at position 0. Syntax error
-  console.log(data);
 
   useEffect(() => {
     csv(csvUrl, row).then(setData);

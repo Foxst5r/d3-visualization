@@ -5,7 +5,6 @@ const jsonUrl = "https://unpkg.com/world-atlas@2.0.2/countries-50m.json";
 export const useWorldAtlas = () => {
   const [data, setData] = useState(null);
   //Json unexpected token in JSON at position 0. Syntax error
-  console.log(data);
 
   useEffect(() => {
     json(jsonUrl).then((topology) => {
