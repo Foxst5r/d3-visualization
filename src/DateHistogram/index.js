@@ -13,7 +13,12 @@ import {
 } from "d3";
 import { AxisBottom } from "./AxisBottom";
 import { AxisLeft } from "./AxisLeft";
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useMemo } from "react";
+
+const xAxisTickFormat = timeFormat("%m/%d/%Y");
+
+const yValue = (d) => d["Total Dead and Missing"];
+const yAxisLabel = "Total Dead and Missing";
 
 export const DateHistorgram = ({
   data,
@@ -31,37 +36,38 @@ export const DateHistorgram = ({
   const xAxisLabelOffset = 80;
   const yAxisLabelOffset = 30;
 
-  const xAxisTickFormat = timeFormat("%m/%d/%Y");
-
-  const yValue = (d) => d["Total Dead and Missing"];
-  const yAxisLabel = "Total Dead and Missing";
-
   const innerHeight = height - margin.top - margin.bottom;
   const innerWidth = width - margin.left - margin.left;
 
-  const xScale = scaleTime()
-    .domain(extent(data, xValue))
-    .range([0, innerWidth])
-    .nice();
+  const xScale = useMemo(
+    () =>
+      scaleTime().domain(extent(data, xValue)).range([0, innerWidth]).nice(),
+    [innerWidth, data, xValue]
+  );
 
-  const [start, stop] = xScale.domain();
+  const binnedData = useMemo(() => {
+    const [start, stop] = xScale.domain();
+    return bin()
+      .value(xValue)
+      .domain(xScale.domain())
+      .thresholds(timeMonths(start, stop))(data)
+      .map((array) => {
+        return {
+          y: sum(array, yValue),
+          x0: array.x0,
+          x1: array.x1,
+        };
+      });
+  }, [xValue, xScale, data, yValue]);
 
-  const binnedData = bin()
-    .value(xValue)
-    .domain(xScale.domain())
-    .thresholds(timeMonths(start, stop))(data)
-    .map((array) => {
-      return {
-        y: sum(array, yValue),
-        x0: array.x0,
-        x1: array.x1,
-      };
-    });
-
-  const yScale = scaleLinear()
-    .domain([0, max(binnedData, (d) => d.y)])
-    .range([innerHeight, 0])
-    .nice();
+  const yScale = useMemo(
+    () =>
+      scaleLinear()
+        .domain([0, max(binnedData, (d) => d.y)])
+        .range([innerHeight, 0])
+        .nice(),
+    [binnedData, innerHeight]
+  );
 
   useEffect(() => {
     const brush = brushX().extent([
